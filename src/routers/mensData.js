@@ -14,15 +14,18 @@ router.get('/', (req, res)=>{
 router.post("/mens-player", async (req,res) => {
     
     try {
+        const request = req.body;
+        request.map( async (val)=>{ //multiple doc insert
+            const createPlayer = new MensPlayer(val);
+            const result = await createPlayer.save();
+                // ([result['ranking']]: result)
+        });
+        res.status(201).send("created");
         
-        const createPlayer = new MensPlayer(req.body);
-        const result = await createPlayer.save();
-        res.status(201).send(result);
 
     } catch (error) {
         res.status(200).send(error);
     }
-
 });
 
 // get
@@ -77,10 +80,6 @@ router.delete("/mens-player/:id", async (req, res)=> {
         res.status(500).send(error)
     }
 });
-
-
-
-
 
 
 module.exports = router;
